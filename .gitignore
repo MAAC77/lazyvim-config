@@ -1,0 +1,30 @@
+# LazyVim runtime files
+lazy-lock.json
+
+# Neovim temp files
+*.log
+debug
+.tests
+.repro
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+
+# Backup files
+*.bak
+*.swp
+*.swo
+*~
+
+# Test files
+foo.*
+tt.*
+data/
+
+# Plugin data (will be downloaded on install)
+plugin/
