@@ -161,6 +161,27 @@ fi
 
 echo ""
 
+# Rust and tree-sitter-cli (required for nvim-treesitter on systems with older glibc)
+if ! command -v cargo &> /dev/null; then
+    echo "Installing Rust via rustup..."
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    source "$HOME/.cargo/env"
+    echo "Rust installed: $(rustc --version)"
+else
+    echo "Rust found: $(rustc --version)"
+fi
+
+# Install tree-sitter-cli via cargo (compiles from source, avoids glibc issues)
+if ! command -v tree-sitter &> /dev/null; then
+    echo "Installing tree-sitter-cli via cargo..."
+    cargo install --locked tree-sitter-cli
+    echo "tree-sitter-cli installed"
+else
+    echo "tree-sitter-cli found: $(tree-sitter --version)"
+fi
+
+echo ""
+
 # Backup existing configuration
 if [ -d "$NVIM_CONFIG_DIR" ]; then
     echo "Existing Neovim configuration found"
