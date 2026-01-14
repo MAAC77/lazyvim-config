@@ -171,6 +171,23 @@ else
     echo "Rust found: $(rustc --version)"
 fi
 
+# Install libclang (required to compile tree-sitter-cli)
+echo "Installing libclang (required for tree-sitter-cli compilation)..."
+case $PKG_MANAGER in
+    apt)
+        sudo apt update -qq && sudo apt install -y libclang-dev
+        ;;
+    pacman)
+        sudo pacman -S --noconfirm clang
+        ;;
+    dnf)
+        sudo dnf install -y clang-devel
+        ;;
+    brew)
+        brew install llvm
+        ;;
+esac
+
 # Install tree-sitter-cli via cargo (compiles from source, avoids glibc issues)
 if ! command -v tree-sitter &> /dev/null; then
     echo "Installing tree-sitter-cli via cargo..."
