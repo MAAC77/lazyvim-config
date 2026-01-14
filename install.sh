@@ -135,20 +135,28 @@ else
     echo "fd found"
 fi
 
-# Node.js (required for many LSP servers)
+# Node.js via nvm (required for many LSP servers)
 if ! command -v node &> /dev/null; then
-    echo "Installing Node.js..."
-    install_package "nodejs" "nodejs" "nodejs" "nodejs" "node" || echo "Please install Node.js manually"
+    echo "Installing Node.js via nvm..."
+
+    # Install nvm if not present
+    if [ ! -d "$HOME/.nvm" ]; then
+        echo "Installing nvm..."
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+    fi
+
+    # Load nvm
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+    # Install LTS version
+    nvm install --lts
+    nvm use --lts
+    nvm alias default 'lts/*'
+
+    echo "Node.js LTS installed: $(node --version)"
 else
     echo "Node.js found: $(node --version)"
-fi
-
-# npm (for LSP servers installation)
-if ! command -v npm &> /dev/null; then
-    echo "Installing npm..."
-    install_package "npm" "npm" "npm" "npm" "npm" || echo "Please install npm manually"
-else
-    echo "npm found"
 fi
 
 echo ""
